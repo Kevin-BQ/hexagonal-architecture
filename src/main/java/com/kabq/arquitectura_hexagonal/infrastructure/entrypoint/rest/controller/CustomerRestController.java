@@ -1,9 +1,9 @@
-package com.kabq.arquitectura_hexagonal.infrastructure.controller;
+package com.kabq.arquitectura_hexagonal.infrastructure.entrypoint.rest.controller;
 
 import com.kabq.arquitectura_hexagonal.domain.port.in.customer.*;
 import com.kabq.arquitectura_hexagonal.domain.model.Customer;
-import com.kabq.arquitectura_hexagonal.infrastructure.dto.request.CustomerRequest;
-import com.kabq.arquitectura_hexagonal.infrastructure.dto.response.CustomerResponse;
+import com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.request.CustomerRequest;
+import com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.response.CustomerResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
-public class CustomerController {
+public class CustomerRestController {
 
     private final CreateCustomerUseCase createCustomerUseCase;
     private final GetCustomerUseCase getCustomerUseCase;
@@ -22,7 +22,7 @@ public class CustomerController {
     private final UpdateCustomerUseCase updateCustomerUseCase;
     private final DeleteCustomerUseCase deleteCustomerUseCase;
 
-    public CustomerController(CreateCustomerUseCase createCustomerUseCase,
+    public CustomerRestController(CreateCustomerUseCase createCustomerUseCase,
                          GetCustomerUseCase getCustomerUseCase,
                          GetAllCustomersUseCase getAllCustomersUseCase,
                          UpdateCustomerUseCase updateCustomerUseCase,

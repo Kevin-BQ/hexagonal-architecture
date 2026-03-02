@@ -1,4 +1,4 @@
-package com.kabq.arquitectura_hexagonal.infrastructure.dto.response;
+package com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

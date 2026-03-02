@@ -1,22 +1,24 @@
-package com.kabq.arquitectura_hexagonal.infrastructure.controller;
+package com.kabq.arquitectura_hexagonal.infrastructure.entrypoint.rest.controller;
 
 import com.kabq.arquitectura_hexagonal.domain.port.in.order.*;
 import com.kabq.arquitectura_hexagonal.domain.port.in.customer.GetCustomerUseCase;
 import com.kabq.arquitectura_hexagonal.domain.model.Order;
 import com.kabq.arquitectura_hexagonal.domain.model.Customer;
-import com.kabq.arquitectura_hexagonal.infrastructure.dto.request.OrderRequest;
-import com.kabq.arquitectura_hexagonal.infrastructure.dto.response.OrderResponse;
+import com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.request.OrderRequest;
+import com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.response.OrderResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
-public class OrderController {
+public class OrderRestController {
 
     private final CreateOrderUseCase createOrderUseCase;
     private final GetOrderUseCase getOrderUseCase;
@@ -25,7 +27,7 @@ public class OrderController {
     private final DeleteOrderUseCase deleteOrderUseCase;
     private final GetCustomerUseCase getCustomerUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase,
+    public OrderRestController(CreateOrderUseCase createOrderUseCase,
                            GetOrderUseCase getOrderUseCase,
                            GetAllOrdersUseCase getAllOrdersUseCase,
                            UpdateOrderUseCase updateOrderUseCase,
@@ -42,7 +44,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request) {
         Order order = new Order(null, request.getCustomerId(), request.getOrderNumber(), 
-                                request.getDate(), request.getTotalAmount());
+                                parseDate(request.getDate()), request.getTotalAmount());
         Order savedOrder = createOrderUseCase.createOrder(order);
         
         // Obtener el nombre del cliente
@@ -54,7 +56,7 @@ public class OrderController {
                 savedOrder.getId(),
                 customerName,
                 savedOrder.getOrderNumber(),
-                savedOrder.getDate(),
+                savedOrder.getDate().toString(),
                 savedOrder.getTotalAmount()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -73,7 +75,7 @@ public class OrderController {
                     order.get().getId(),
                     customerName,
                     order.get().getOrderNumber(),
-                    order.get().getDate(),
+                    order.get().getDate().toString(),
                     order.get().getTotalAmount()
             );
             return ResponseEntity.ok(response);
@@ -96,7 +98,7 @@ public class OrderController {
                             order.getId(),
                             customerName,
                             order.getOrderNumber(),
-                            order.getDate(),
+                            order.getDate().toString(),
                             order.getTotalAmount()
                     );
                 })
@@ -108,7 +110,7 @@ public class OrderController {
     public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id,
                                                       @Valid @RequestBody OrderRequest request) {
         Order orderToUpdate = new Order(id, request.getCustomerId(), request.getOrderNumber(),
-                                        request.getDate(), request.getTotalAmount());
+                                        parseDate(request.getDate()), request.getTotalAmount());
         Order updatedOrder = updateOrderUseCase.updateOrder(id, orderToUpdate);
         
         // Obtener el nombre del cliente
@@ -120,7 +122,7 @@ public class OrderController {
                 updatedOrder.getId(),
                 customerName,
                 updatedOrder.getOrderNumber(),
-                updatedOrder.getDate(),
+                updatedOrder.getDate().toString(),
                 updatedOrder.getTotalAmount()
         );
         return ResponseEntity.ok(response);
@@ -130,5 +132,13 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         deleteOrderUseCase.deleteOrder(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private LocalDateTime parseDate(String date) {
+        try {
+            return LocalDateTime.parse(date);
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException("Formato inválido para date. Usa ISO-8601, por ejemplo 2026-03-02T10:30:00");
+        }
     }
 }

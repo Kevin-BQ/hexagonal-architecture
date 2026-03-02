@@ -1,4 +1,4 @@
-package com.kabq.arquitectura_hexagonal.infrastructure.dto.request;
+package com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

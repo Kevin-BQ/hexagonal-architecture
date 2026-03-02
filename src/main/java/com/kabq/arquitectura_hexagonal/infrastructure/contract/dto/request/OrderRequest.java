@@ -1,4 +1,4 @@
-package com.kabq.arquitectura_hexagonal.infrastructure.dto.request;
+package com.kabq.arquitectura_hexagonal.infrastructure.contract.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 @Data
 public class OrderRequest {
 
@@ -20,8 +18,8 @@ public class OrderRequest {
     @Size(min = 3, max = 50, message = "El número de orden debe tener entre 3 y 50 caracteres")
     private String orderNumber;
 
-    @NotNull(message = "La fecha no puede estar vacía")
-    private LocalDateTime date;
+    @NotBlank(message = "La fecha no puede estar vacía")
+    private String date;
 
     @NotNull(message = "El monto total no puede estar vacío")
     @Positive(message = "El monto total debe ser un número positivo")
