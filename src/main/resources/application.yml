@@ -1,0 +1,18 @@
+spring:
+  config:
+    import: optional:file:.env
+  application:
+    name: arquitectura-hexagonal
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+  graphql:
+    graphiql:
+      enabled: true

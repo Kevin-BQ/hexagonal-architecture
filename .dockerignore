@@ -1,0 +1,4 @@
+.mvn/
+target/*
+!target/*.jar
+*.log
