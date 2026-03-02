@@ -1,0 +1,40 @@
+type Query {
+  customers: [Customer!]!
+  customerById(id: ID!): Customer
+  orders: [Order!]!
+  orderById(id: ID!): Order
+}
+
+type Mutation {
+  createCustomer(input: CustomerRequest!): Customer!
+  updateCustomer(id: ID!, input: CustomerRequest!): Customer!
+  deleteCustomer(id: ID!): Boolean!
+
+  createOrder(input: OrderRequest!): Order!
+  updateOrder(id: ID!, input: OrderRequest!): Order!
+  deleteOrder(id: ID!): Boolean!
+}
+
+type Customer {
+  id: ID!
+  name: String!
+}
+
+type Order {
+  id: ID!
+  customerName: String!
+  orderNumber: String!
+  date: String!
+  totalAmount: Float!
+}
+
+input CustomerRequest {
+  name: String!
+}
+
+input OrderRequest {
+  customerId: ID!
+  orderNumber: String!
+  date: String!
+  totalAmount: Float!
+}
