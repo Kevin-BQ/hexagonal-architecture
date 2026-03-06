@@ -63,6 +63,17 @@ Este diagrama muestra los conceptos clave:
 - **Ports (Puertos)**: Interfaces que definen contratos de comunicación  
 - **Adapters (Adaptadores)**: Implementaciones que se conectan a esos puertos
 
+## 🚀 GraphQL Integración
+
+En lugar de utilizar controladores REST tradicionales para todas las operaciones, este proyecto integra **GraphQL** usando `spring-boot-starter-graphql` para proporcionar una API más flexible y eficiente.
+
+### Beneficios obtenidos con GraphQL:
+1. **Evitar Over-fetching**: El cliente solo solicita los datos exactos del `Customer` o `Order` que necesita.
+2. **Consultas a medida (Queries)**: Flexibilidad para obtener listas completas o buscar por ID con la estructura deseada.
+3. **Operaciones de escritura (Mutations)**: Creación de clientes y órdenes manejadas a través de mutaciones tipadas fuertemente.
+
+*Nota: Puedes probar la API interactiva en `http://localhost:8080/graphiql` una vez que levantes el proyecto.*
+
 ## 🧠 ¿QUÉ VA EN CADA PARTE? (explicado fácil)
 
 ### ❤️ domain = NEGOCIO
@@ -132,11 +143,13 @@ Aquí van las implementaciones reales:
 #### 🎮 controller
 
 Aquí va:
-- `CustomerController.java`
-- `OrderController.java`
+- `CustomerController.java` (REST)
+- `OrderController.java` (REST)
+- `CustomerGraphqlController.java` (GraphQL)
+- `OrderGraphqlController.java` (GraphQL)
 
 **Ellos:**
-- ✔ reciben HTTP
+- ✔ reciben HTTP (REST o GraphQL)
 - ✔ usan DTO
 - ✔ llaman casos de uso
 
@@ -212,7 +225,7 @@ DB
 
 Si mañana:
 - **cambias MySQL por Mongo** 👉 solo cambias: `infrastructure/persistence`
-- **cambias REST por Kafka** 👉 solo cambias: `infrastructure/controller`
+- **cambias REST por Kafka (o completas la migración a GraphQL)** 👉 solo cambias: `infrastructure/controller`
 
 **El dominio:**
 - ✔ no cambia
@@ -241,11 +254,14 @@ Si mañana:
 ## 🚀 Tecnologías Utilizadas
 
 - **Java 21** - Lenguaje principal
-- **Spring Boot 4.0.2** - Framework principal
+- **Spring Boot 4.x** - Framework principal
+- **Spring for GraphQL** - Implementación de API GraphQL
 - **Spring Data JPA** - Persistencia
 - **SQL Server** - Base de datos
 - **Maven** - Gestión de dependencias
 - **Lombok** - Reducción de código boilerplate
+- **Docker** - Contenerización
+- **Azure** - (ACR, ACA, SQL DB) para despliegue en la nube
 
 ## ⚙️ Configuración de Base de Datos
 
@@ -285,6 +301,7 @@ spring.jpa.database-platform=org.hibernate.dialect.SQLServerDialect
 
 3. **Acceder a la aplicación:**
    - La aplicación correrá en `http://localhost:8080`
+   - **GraphQL UI (GraphiQL):** Accede a `http://localhost:8080/graphiql` para probar las consultas.
 
 ## 📝 Estado Actual
 
